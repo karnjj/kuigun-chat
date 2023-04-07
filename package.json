@@ -4,13 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^8.0.0",
+    "is-ci": "^3.0.1",
     "prettier": "^2.8.7",
     "turbo": "^1.8.5"
+  },
+  "dependencies": {
+    "lint-staged": "^13.2.1"
   }
 }

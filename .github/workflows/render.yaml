@@ -8,6 +8,11 @@ on:
       - 'apps/api/**'
       - 'pnpm-lock.yaml'
 
+permissions:
+  contents: read
+  deployments: write
+  statuses: write
+
 jobs:
   deploy:
     name: Wait for Deploy

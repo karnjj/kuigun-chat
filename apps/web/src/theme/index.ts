@@ -2,7 +2,44 @@ import createCache from '@emotion/cache'
 import { Components, PaletteOptions, Shadows, ThemeOptions, createTheme } from '@mui/material'
 import { overrideMuiTypography } from './typography'
 
-const palette: PaletteOptions = {}
+declare module '@mui/material/styles' {
+  interface Palette {
+    badge: {
+      lime: string
+    }
+  }
+
+  interface PaletteOptions {
+    badge: {
+      lime: string
+    }
+  }
+}
+
+const palette: PaletteOptions = {
+  primary: {
+    main: '#79AF8D',
+    light: '#B6CD92',
+    dark: '#366A74',
+    contrastText: '#2F4858',
+  },
+  secondary: {
+    main: '#79AF8D',
+    dark: '#B6CD92',
+    contrastText: '#FFF0CA',
+  },
+  background: {
+    default: '#FFE7A1',
+    paper: '#B6CD92',
+  },
+  text: {
+    primary: '#2F4858',
+    secondary: '#FFF0CA',
+  },
+  badge: {
+    lime: '#C2FF9D',
+  },
+}
 
 const components: Components = {}
 

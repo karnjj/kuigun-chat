@@ -7,12 +7,18 @@ declare module '@mui/material/styles' {
     badge: {
       lime: string
     }
+    white: string
+    black: string
+    yellow: string
   }
 
   interface PaletteOptions {
     badge: {
       lime: string
     }
+    white: string
+    black: string
+    yellow: string
   }
 }
 
@@ -39,9 +45,20 @@ const palette: PaletteOptions = {
   badge: {
     lime: '#C2FF9D',
   },
+  white: '#FFFFFF',
+  black: '#000000',
+  yellow: '#FFD600',
 }
 
-const components: Components = {}
+const components: Components = {
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        borderRadius: '8px',
+      },
+    },
+  },
+}
 
 const shadows: Shadows = Array(25).fill('none') as Shadows
 

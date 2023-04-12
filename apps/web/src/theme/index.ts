@@ -19,13 +19,13 @@ declare module '@mui/material/styles' {
 const palette: PaletteOptions = {
   primary: {
     main: '#79AF8D',
-    light: '#B6CD92',
+    light: '#B6DA7E',
     dark: '#366A74',
     contrastText: '#2F4858',
   },
   secondary: {
-    main: '#79AF8D',
-    dark: '#B6CD92',
+    main: '#B2AB99',
+    dark: '#4C4637',
     contrastText: '#FFF0CA',
   },
   background: {

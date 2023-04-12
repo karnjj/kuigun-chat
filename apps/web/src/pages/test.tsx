@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material'
-import ChatRow from './components/ChatRow'
+import PageChatRow from '@/components/PageChatRow'
 
 export default function Home() {
   return (
@@ -12,9 +12,9 @@ export default function Home() {
           direction: 'column',
         }}
       >
-        <ChatRow name="haha" isNew={false} isGroup={true} />
-        <ChatRow name="Group1" isNew={true} isGroup={false} />
-        <ChatRow name="Alaska" isNew={false} isGroup={true} members={1} />
+        <PageChatRow name="haha" isNew={false} isGroup={true} />
+        <PageChatRow name="Group1" isNew={true} isGroup={false} />
+        <PageChatRow name="Alaska" isNew={false} isGroup={true} members={1} />
       </Stack>
     </>
   )

@@ -28,7 +28,7 @@ const PageChatRow = ({ name, isNew, isGroup, members }: PageChatRowProps) => {
         }}
       >
         <Stack spacing={2} direction={'row'} alignItems="center" width="100%">
-          <Typography variant="h4" align="center" sx={{ color: 'text.light' }}>
+          <Typography variant="h4" align="center" sx={{ color: 'text.secondary' }}>
             {name}
           </Typography>
 

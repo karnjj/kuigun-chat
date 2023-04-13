@@ -1,4 +1,4 @@
-import { Fab, Dialog, Stack, Typography, Button, TextField, Box, darken } from '@mui/material'
+import { Dialog, Stack, Typography, Button, TextField, Box, darken } from '@mui/material'
 import { useState } from 'react'
 interface ArtistRegisterFormProps {
   show: boolean
@@ -27,7 +27,7 @@ const ColorDot = ({ color, selected, onClick }: ColorDotProps) => {
 
 const PopUp = ({ show, onClose }: ArtistRegisterFormProps) => {
   const colors = ['#FCDDEC', '#B6FFD3', '#ADDEFA']
-  const [selectedColor, setSelectedColor] = useState<String>()
+  const [selectedColor, setSelectedColor] = useState<string>()
   return (
     <Dialog
       open={show}
@@ -43,7 +43,7 @@ const PopUp = ({ show, onClose }: ArtistRegisterFormProps) => {
       // color='secondary.main'
     >
       <Stack direction="column" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
-        <Typography>Room's Name</Typography>
+        <Typography>{"Room's Name"}</Typography>
         <TextField
           size="small"
           fullWidth
@@ -57,7 +57,12 @@ const PopUp = ({ show, onClose }: ArtistRegisterFormProps) => {
         <Stack direction="row" justifyContent="space-around" alignItems="center" spacing={1}>
           <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
             {colors.map((color) => (
-              <ColorDot color={color} selected={selectedColor === color} onClick={() => setSelectedColor(color)} />
+              <ColorDot
+                key={color}
+                color={color}
+                selected={selectedColor === color}
+                onClick={() => setSelectedColor(color)}
+              />
             ))}
           </Stack>
           <Button

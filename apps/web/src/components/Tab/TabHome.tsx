@@ -1,11 +1,11 @@
 import { Box, Tab, TabProps, Tabs, Typography } from '@mui/material'
-import { useState } from 'react'
 import GroupTab from './GroupTab'
 import PeopleTab from './PeopleTab'
 import TabPanel from './TabPanel'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 const TabHome = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useLocalStorage('tab-home', 0)
   return (
     <Box sx={{ width: '100%', height: '450px' }}>
       <Tabs

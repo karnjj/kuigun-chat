@@ -4,12 +4,13 @@ const resTopic = (path: string) => `response-${path}`
 
 const trigger = (path: string) => `trigger-${path}`
 
-const simRest = <T = any,>(socket: Socket, path: string, data?: any) => {
+const simRest = <T = any,>(socket: Socket | null, path: string, data?: any) => {
   return new Promise<T>((resolve) => {
-    socket.emit(path, data)
-    socket.on(resTopic(path), (response: any) => {
+    socket?.emit(path, data)
+
+    socket?.on(resTopic(path), (response: any) => {
       resolve(response)
-      socket.off(resTopic(path))
+      socket?.off(resTopic(path))
     })
   })
 }

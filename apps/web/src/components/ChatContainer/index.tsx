@@ -1,9 +1,11 @@
 import { Box, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ChatContainerProps extends React.PropsWithChildren {}
 
 const ChatContainer = ({ children }: ChatContainerProps) => {
+  const router = useRouter()
   return (
     <Box width="100%">
       <Box
@@ -11,6 +13,7 @@ const ChatContainer = ({ children }: ChatContainerProps) => {
         width="fit-content"
         px={4}
         borderRadius="8px 8px 0px 0px"
+        onClick={() => router.push('/home')}
         sx={{
           cursor: 'pointer',
         }}

@@ -1,9 +1,19 @@
 import { Stack, Typography, Button, TextField, darken } from '@mui/material'
 import { useShow } from '@/hooks/useShow'
 import CreateGroupDialog from '../CreateGroupDialog'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const GroupBar = () => {
+  const router = useRouter()
   const createGroup = useShow()
+  const [groupId, setGroupId] = useState<string>()
+
+  const handleJoinGroup = () => {
+    if (groupId) {
+      router.push(`/chat/group/${groupId}`)
+    }
+  }
 
   return (
     <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
@@ -21,12 +31,13 @@ const GroupBar = () => {
       >
         <Typography>Create group</Typography>
       </Button>
-      <CreateGroupDialog show={createGroup.show} onClose={createGroup.onClose} />
+      {createGroup.show && <CreateGroupDialog show={createGroup.show} onClose={createGroup.onClose} />}
 
       <TextField
         size="small"
         fullWidth
-        placeholder="Fill room ID"
+        placeholder="Fill group ID"
+        onChange={(e) => setGroupId(e.target.value)}
         InputProps={{
           sx: {
             bgcolor: 'white',
@@ -36,6 +47,7 @@ const GroupBar = () => {
 
       <Button
         variant="contained"
+        onClick={handleJoinGroup}
         sx={{
           bgcolor: 'primary.dark',
           color: 'primary.light',

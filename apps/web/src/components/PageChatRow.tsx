@@ -10,7 +10,7 @@ interface PageChatRowProps {
   onClick?: () => void
 }
 
-const PageChatRow = ({ name, isNew, isGroup, members }: PageChatRowProps) => {
+const PageChatRow = ({ name, isNew, isGroup, members, onClick }: PageChatRowProps) => {
   const num_members = members == undefined ? 0 : members
   return (
     <>
@@ -20,9 +20,7 @@ const PageChatRow = ({ name, isNew, isGroup, members }: PageChatRowProps) => {
         bgcolor="secondary.dark"
         borderRadius="8px"
         padding="12px"
-        onClick={() => {
-          console.log('Go go')
-        }}
+        onClick={onClick}
         sx={{
           cursor: 'pointer',
         }}

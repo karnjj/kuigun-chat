@@ -1,4 +1,6 @@
+import { useCreateGroup, useGroupColors } from '@/queries/useGroup'
 import { Dialog, Stack, Typography, Button, TextField, Box, darken } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 interface CreateGroupDialogProps {
@@ -7,8 +9,20 @@ interface CreateGroupDialogProps {
 }
 
 const CreateGroupDialog = ({ show, onClose }: CreateGroupDialogProps) => {
-  const colors = ['#FCDDEC', '#B6FFD3', '#ADDEFA']
+  const router = useRouter()
+  const colors = useGroupColors()
+  const [createGroup] = useCreateGroup()
   const [selectedColor, setSelectedColor] = useState<string>()
+  const [groupName, setGroupName] = useState<string>()
+
+  const handleSubmit = async () => {
+    if (selectedColor && groupName) {
+      const { groupId } = await createGroup({ name: groupName, color: selectedColor })
+      router.push(`/chat/group/${groupId}`)
+      onClose?.()
+    }
+  }
+
   return (
     <Dialog
       open={show}
@@ -28,7 +42,8 @@ const CreateGroupDialog = ({ show, onClose }: CreateGroupDialogProps) => {
         <TextField
           size="small"
           fullWidth
-          placeholder="Fill room ID"
+          placeholder="Enter Group Name"
+          onChange={(e) => setGroupName(e.target.value)}
           InputProps={{
             sx: {
               bgcolor: 'white',
@@ -37,7 +52,7 @@ const CreateGroupDialog = ({ show, onClose }: CreateGroupDialogProps) => {
         />{' '}
         <Stack direction="row" justifyContent="space-around" alignItems="center" spacing={1}>
           <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
-            {colors.map((color) => (
+            {colors?.map((color) => (
               <ColorDot
                 key={color}
                 color={color}
@@ -48,6 +63,7 @@ const CreateGroupDialog = ({ show, onClose }: CreateGroupDialogProps) => {
           </Stack>
           <Button
             variant="contained"
+            onClick={handleSubmit}
             sx={{
               bgcolor: 'primary.dark',
               color: 'primary.light',

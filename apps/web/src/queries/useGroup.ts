@@ -1,5 +1,5 @@
 import { useSocket } from '@/contexts/socketContext'
-import { trigger } from '@/utils'
+import { simRest, trigger } from '@/utils'
 import { useEffect, useState } from 'react'
 
 type TAllGroups = {
@@ -24,4 +24,34 @@ const useAllGroups = () => {
   return data
 }
 
-export { useAllGroups }
+const useGroupColors = () => {
+  const { socket } = useSocket()
+  const [data, setData] = useState<string[]>()
+
+  useEffect(() => {
+    if (!socket) return
+    ;(async () => {
+      const colors = await simRest<string[]>(socket, 'get-all-colors')
+      setData(colors)
+    })()
+  }, [socket])
+
+  return data
+}
+
+interface ICreateGroupRes {
+  groupId: string
+  status: 'OK' | 'ERROR'
+}
+
+const useCreateGroup = () => {
+  const { socket } = useSocket()
+
+  const trigger = async (data: { name: string; color: string }) => {
+    return await simRest<ICreateGroupRes>(socket, 'create-group', data)
+  }
+
+  return [trigger]
+}
+
+export { useAllGroups, useCreateGroup, useGroupColors }

@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io'
 import { chatColor } from '../helpers/color'
+import { randomString } from '../helpers'
 
 type UserPair = [string, string]
 
@@ -80,7 +81,13 @@ class ChatService {
     return group.chatHistory
   }
 
-  createGroup(groupId: string, name: string, color: string) {
+  createGroup(name: string, color: string) {
+    let groupId = randomString(6)
+
+    while (this.isGroupExist(groupId)) {
+      groupId = randomString(6)
+    }
+
     if (this.groups.has(groupId)) {
       throw new Error(`Group ${groupId} already exists`)
     }
@@ -91,6 +98,12 @@ class ChatService {
       chatHistory: [],
       participants: new Set(),
     })
+
+    return {
+      id: groupId,
+      name,
+      color,
+    }
   }
 
   getAllGroupsWithOnlineCount() {
@@ -104,6 +117,10 @@ class ChatService {
 
   getAllGroupColors() {
     return chatColor
+  }
+
+  isGroupExist(groupId: string) {
+    return this.groups.has(groupId)
   }
 }
 

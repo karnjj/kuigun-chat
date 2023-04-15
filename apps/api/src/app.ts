@@ -1,8 +1,8 @@
 import express, { Express, Request, Response } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
-import ChatService from './services/chatService'
 import { response, send } from './helpers/response'
+import ChatService from './services/chatService'
 
 const app: Express = express()
 const server = http.createServer(app)
@@ -53,9 +53,9 @@ io.on('connection', (socket) => {
   })
 
   socket.on('create-group', (data) => {
-    chatService.createGroup(data.groupId, data.name, data.color)
+    const { id } = chatService.createGroup(data.name, data.color)
     send(io, 'all-groups', chatService.getAllGroupsWithOnlineCount())
-    response(io, 'create-group', 'OK')
+    response(io, 'create-group', { groupId: id, status: 'OK' })
   })
 
   socket.on('get-all-colors', () => {

@@ -40,12 +40,13 @@ export default function LogIn() {
                 autoFocus
                 sx={{background: 'white'}}
                 InputLabelProps={{disableAnimation: true, style:{color: 'gray', }, shrink:false}}
-                label={nickName=== "" ? "Fill your nickname": ""}
+                placeholder="Fill your nickname"
                 InputProps={{sx:{
                   "& input": {
                     textAlign: "center"
                 }
                 }}}
+                
                         
                 
             />

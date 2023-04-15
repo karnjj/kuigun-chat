@@ -4,6 +4,8 @@ import { CacheProvider, EmotionCache } from '@emotion/react'
 import { ThemeProvider } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import DesktopLayout from '@/Layout/DesktopLayout'
+import { SessionProvider } from '@/contexts/sessionContext'
+import { SocketProvider } from '@/contexts/socketContext'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -17,10 +19,14 @@ export default function App(props: MyAppProps) {
   return (
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <DesktopLayout>
-          <Component {...pageProps} />
-        </DesktopLayout>
+        <SessionProvider>
+          <SocketProvider>
+            <CssBaseline />
+            <DesktopLayout>
+              <Component {...pageProps} />
+            </DesktopLayout>
+          </SocketProvider>
+        </SessionProvider>
       </ThemeProvider>
     </CacheProvider>
   )

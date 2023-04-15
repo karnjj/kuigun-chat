@@ -1,8 +1,10 @@
 import { Box, Stack } from '@mui/material'
 import GroupBar from '../GroupBar'
 import PageChatRow from '../PageChatRow'
+import { useAllGroups } from '@/queries/useGroup'
 
 const GroupTab = () => {
+  const allGroups = useAllGroups()
   return (
     <Box px={1.5} py={1.5} sx={{ bgcolor: 'background.paper' }}>
       <Stack
@@ -13,9 +15,9 @@ const GroupTab = () => {
           direction: 'column',
         }}
       >
-        <PageChatRow name="Group1" isNew={false} isGroup={true} members={7} />
-        <PageChatRow name="Group2" isNew={true} isGroup={true} members={3} />
-        <PageChatRow name="Group3" isNew={false} isGroup={true} members={1} />
+        {allGroups?.map((group, idx) => (
+          <PageChatRow key={idx} name={group.name} isNew={false} isGroup={true} members={group.onlineCount} />
+        ))}
         <GroupBar />
       </Stack>
     </Box>

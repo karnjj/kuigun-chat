@@ -1,57 +1,24 @@
-import { Stack, Typography, Button, TextField, darken } from '@mui/material'
-import PopUp from './PopUp'
-import { useShow } from '@/hooks/useShow'
+import { Box, Stack } from '@mui/material'
+import GroupBar from '../GroupBar'
+import PageChatRow from '../PageChatRow'
 
-interface GroupTab {
-  userId?: string
-}
-// { userId }: GroupTab
 const GroupTab = () => {
-  const createGroup = useShow()
-
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-      <Button
-        variant="contained"
+    <Box px={1.5} py={1.5} sx={{ bgcolor: 'background.paper' }}>
+      <Stack
+        width={'100%'}
+        display="flex"
+        spacing={2}
         sx={{
-          bgcolor: 'primary.dark',
-          color: 'primary.light',
-          '&:hover': {
-            backgroundColor: (theme) => darken(theme.palette.primary.dark, 0.1),
-            color: 'primary.light',
-          },
-        }}
-        onClick={createGroup.onShow}
-      >
-        <Typography>Create group</Typography>
-      </Button>
-      <PopUp show={createGroup.show} onClose={createGroup.onClose} />
-
-      <TextField
-        size="small"
-        fullWidth
-        placeholder="Fill room ID"
-        InputProps={{
-          sx: {
-            bgcolor: 'white',
-          },
-        }}
-      />
-
-      <Button
-        variant="contained"
-        sx={{
-          bgcolor: 'primary.dark',
-          color: 'primary.light',
-          '&:hover': {
-            backgroundColor: (theme) => darken(theme.palette.primary.dark, 0.1),
-            color: 'primary.light',
-          },
+          direction: 'column',
         }}
       >
-        <Typography>Join group</Typography>
-      </Button>
-    </Stack>
+        <PageChatRow name="Group1" isNew={false} isGroup={true} members={7} />
+        <PageChatRow name="Group2" isNew={true} isGroup={true} members={3} />
+        <PageChatRow name="Group3" isNew={false} isGroup={true} members={1} />
+        <GroupBar />
+      </Stack>
+    </Box>
   )
 }
 

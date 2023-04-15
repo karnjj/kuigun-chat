@@ -1,31 +1,12 @@
 import { Dialog, Stack, Typography, Button, TextField, Box, darken } from '@mui/material'
 import { useState } from 'react'
-interface ArtistRegisterFormProps {
+
+interface CreateGroupDialogProps {
   show: boolean
   onClose?: () => void
 }
 
-interface ColorDotProps {
-  color: string
-  selected?: boolean
-  onClick?: () => void
-}
-
-const ColorDot = ({ color, selected, onClick }: ColorDotProps) => {
-  return (
-    <Box
-      sx={{ cursor: 'pointer' }}
-      width="24px"
-      height="24px"
-      onClick={onClick}
-      bgcolor={color}
-      borderRadius="50%"
-      border={selected ? '2px solid #000' : 'none'}
-    />
-  )
-}
-
-const PopUp = ({ show, onClose }: ArtistRegisterFormProps) => {
+const CreateGroupDialog = ({ show, onClose }: CreateGroupDialogProps) => {
   const colors = ['#FCDDEC', '#B6FFD3', '#ADDEFA']
   const [selectedColor, setSelectedColor] = useState<string>()
   return (
@@ -84,4 +65,24 @@ const PopUp = ({ show, onClose }: ArtistRegisterFormProps) => {
   )
 }
 
-export default PopUp
+export default CreateGroupDialog
+
+interface ColorDotProps {
+  color: string
+  selected?: boolean
+  onClick?: () => void
+}
+
+const ColorDot = ({ color, selected, onClick }: ColorDotProps) => {
+  return (
+    <Box
+      sx={{ cursor: 'pointer' }}
+      width="24px"
+      height="24px"
+      onClick={onClick}
+      bgcolor={color}
+      borderRadius="50%"
+      border={selected ? '2px solid #000' : 'none'}
+    />
+  )
+}

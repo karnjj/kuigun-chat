@@ -54,4 +54,63 @@ const useCreateGroup = () => {
   return [trigger]
 }
 
-export { useAllGroups, useCreateGroup, useGroupColors }
+interface Message {
+  sender: string
+  sendAt: Date
+  message: string
+}
+
+const useGroupHistory = (groupId: string) => {
+  const { socket } = useSocket()
+  const [data, setData] = useState<Message[]>()
+
+  useEffect(() => {
+    if (!socket) return
+    socket.emit('join-group', { groupId })
+    socket.emit(trigger('group-chat-history'), { groupId })
+
+    socket.on('group-chat-history', (data: Message[]) => {
+      setData(data)
+    })
+
+    return () => {
+      socket.emit('leave-group', { groupId })
+    }
+  }, [socket, groupId])
+
+  return data
+}
+
+const useSendGroupMessage = () => {
+  const { socket } = useSocket()
+
+  const trigger = (data: { groupId: string; message: string }) => {
+    socket?.emit('send-group-message', data)
+  }
+
+  return [trigger]
+}
+
+const useListenGroupOnlineCount = (groupId: string, default_value: number) => {
+  const { socket } = useSocket()
+  const [data, setData] = useState<number>()
+
+  useEffect(() => {
+    if (!socket) return
+    socket.on(`group-${groupId}-online-count`, (data: number) => {
+      setData(data)
+    })
+
+    return () => {
+      socket.off(`group-${groupId}-online-count`)
+    }
+  }, [])
+
+  useEffect(() => {
+    setData(default_value)
+  }, [default_value])
+
+  return data
+}
+
+export { useAllGroups, useCreateGroup, useGroupColors, useGroupHistory, useSendGroupMessage, useListenGroupOnlineCount }

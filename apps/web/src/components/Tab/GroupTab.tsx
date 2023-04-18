@@ -23,6 +23,7 @@ const GroupTab = () => {
             name={group.name}
             isNew={false}
             isGroup={true}
+            groupId={group.id}
             members={group.onlineCount}
             onClick={() => router.push(`/chat/group/${group.id}`)}
           />

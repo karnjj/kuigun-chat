@@ -65,7 +65,16 @@ class ChatService {
     }
     const newMessage = { sender, sendAt: new Date(), message }
     group.chatHistory.push(newMessage)
-    group.participants.add(sender)
+    group.chatHistory.sort((a, b) => b.sendAt.getTime() - a.sendAt.getTime())
+  }
+
+  addGroupParticipant(groupId: string, username: string) {
+    if (this.users.has(username)) return false
+
+    const group = this.groups.get(groupId)
+    group?.participants.add(username)
+
+    return true
   }
 
   getPrivateMessages(sender: string, receiver: string) {
@@ -113,6 +122,13 @@ class ChatService {
       name,
       onlineCount: Array.from(participants).filter((username) => onlineUsers.includes(username)).length,
     }))
+  }
+
+  getGroupOnlineCount(groupId: string) {
+    const onlineUsers = this.getOnlineUsers()
+    const group = this.groups.get(groupId)
+
+    return group ? Array.from(group.participants).filter((username) => onlineUsers.includes(username)).length : 0
   }
 
   getAllGroupColors() {

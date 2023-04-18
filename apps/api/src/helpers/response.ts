@@ -4,9 +4,13 @@ const send = (io: Server, topic: string, msg: any) => {
   io.emit(topic, msg)
 }
 
-const response = (io: Server, topic: string, msg: any) => {
-  const responseTopic = `response-${topic}`
-  io.emit(responseTopic, msg)
+const sendRoom = (io: Server, room: string, topic: string, msg: any) => {
+  io.to(room).emit(topic, msg)
 }
 
-export { send, response }
+const response = (io: Server, to: string, topic: string, msg: any) => {
+  const responseTopic = `response-${topic}`
+  io.to(to).emit(responseTopic, msg)
+}
+
+export { send, sendRoom, response }

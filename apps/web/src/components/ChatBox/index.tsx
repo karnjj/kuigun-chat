@@ -1,51 +1,49 @@
+import { useSession } from '@/contexts/sessionContext'
+import { useSendGroupMessage } from '@/queries/useGroup'
 import { Box, Button, Stack, TextField, Typography, darken } from '@mui/material'
 
-const mockChat = Array.from({ length: 10 }).map((_, index) => {
-  return {
-    message: `${index}`.repeat(4),
-    senderName: `${index}`,
-  }
-})
-const mockUserName = 'username'
+interface Message {
+  sender: string
+  sendAt: Date
+  message: string
+}
 
 interface ChatBoxProps {
   color: string
+  groupId: string
+  chat?: Message[]
 }
 
-const ChatBox = ({ color }: ChatBoxProps) => {
+const ChatBox = ({ color, chat, groupId }: ChatBoxProps) => {
+  const { username } = useSession()
+  const [sendMessage] = useSendGroupMessage()
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const msg = (e.currentTarget[0] as any).value
     if (!msg) return
 
-    // TODO: send message to server
-    console.log(msg)
-    mockChat.push({
-      message: msg,
-      senderName: mockUserName,
-    })
-
+    sendMessage({ groupId, message: msg })
     // clear input
     ;(e.currentTarget[0] as any).value = ''
   }
 
   const handleSayHello = () => {
-    //TODO: send hello message to server
-    console.log('say hello')
+    sendMessage({ groupId, message: `Hello from ${username}` })
   }
 
   return (
     <Box>
       <Stack direction="column-reverse" bgcolor="white" height="400px">
         <Stack direction="column-reverse" overflow="auto" p={1} spacing={1}>
-          {!mockChat?.length && <SayHello onClick={handleSayHello} />}
-          {mockChat.map(({ message, senderName }, idx) => {
+          {!chat?.length && <SayHello onClick={handleSayHello} />}
+          {chat?.map(({ message, sender }, idx) => {
             return (
               <ChatMessage
                 key={idx}
                 message={message}
-                senderName={senderName}
-                isSender={senderName === mockUserName}
+                senderName={sender}
+                isSender={sender === username}
                 color={color}
               />
             )

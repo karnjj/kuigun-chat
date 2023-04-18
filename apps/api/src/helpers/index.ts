@@ -5,4 +5,6 @@ const randomString = (length: number) => {
   return result
 }
 
-export { randomString }
+const groupKey = (groupId: string) => `group-${groupId}`
+
+export { groupKey, randomString }

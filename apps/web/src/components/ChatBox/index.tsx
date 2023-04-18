@@ -1,5 +1,4 @@
 import { useSession } from '@/contexts/sessionContext'
-import { useSendGroupMessage } from '@/queries/useGroup'
 import { Box, Button, Stack, TextField, Typography, darken } from '@mui/material'
 
 interface Message {
@@ -10,26 +9,25 @@ interface Message {
 
 interface ChatBoxProps {
   color: string
-  groupId: string
   chat?: Message[]
+  sendMsg?: (msg: string) => void
 }
 
-const ChatBox = ({ color, chat, groupId }: ChatBoxProps) => {
+const ChatBox = ({ color, chat, sendMsg }: ChatBoxProps) => {
   const { username } = useSession()
-  const [sendMessage] = useSendGroupMessage()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const msg = (e.currentTarget[0] as any).value
     if (!msg) return
 
-    sendMessage({ groupId, message: msg })
+    sendMsg?.(msg)
     // clear input
     ;(e.currentTarget[0] as any).value = ''
   }
 
   const handleSayHello = () => {
-    sendMessage({ groupId, message: `Hello from ${username}` })
+    sendMsg?.(`Hello from ${username}`)
   }
 
   return (

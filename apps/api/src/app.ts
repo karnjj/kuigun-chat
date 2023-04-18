@@ -71,6 +71,10 @@ io.on('connection', (socket) => {
     response(io, socket.id, 'get-all-colors', chatService.getAllGroupColors())
   })
 
+  socket.on('get-group-color', (data) => {
+    response(io, socket.id, 'get-group-color', chatService.getGroupColor(data.groupId))
+  })
+
   socket.on('trigger-online-users', () => {
     send(io, 'online-users', chatService.getOnlineUsers())
   })

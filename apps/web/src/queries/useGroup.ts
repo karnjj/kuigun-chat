@@ -104,7 +104,7 @@ const useListenGroupOnlineCount = (groupId: string, default_value: number) => {
     return () => {
       socket.off(`group-${groupId}-online-count`)
     }
-  }, [])
+  }, [socket, groupId])
 
   useEffect(() => {
     setData(default_value)
@@ -113,4 +113,26 @@ const useListenGroupOnlineCount = (groupId: string, default_value: number) => {
   return data
 }
 
-export { useAllGroups, useCreateGroup, useGroupColors, useGroupHistory, useSendGroupMessage, useListenGroupOnlineCount }
+const useGroupColor = (groupId: string) => {
+  const { socket } = useSocket()
+  const [data, setData] = useState<string>()
+
+  useEffect(() => {
+    if (!socket) return
+    simRest<string>(socket, 'get-group-color', { groupId }).then((color) => {
+      setData(color)
+    })
+  }, [socket, groupId])
+
+  return data
+}
+
+export {
+  useAllGroups,
+  useCreateGroup,
+  useGroupColors,
+  useGroupHistory,
+  useSendGroupMessage,
+  useListenGroupOnlineCount,
+  useGroupColor,
+}

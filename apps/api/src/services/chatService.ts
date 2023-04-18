@@ -50,6 +50,11 @@ class ChatService {
     return this.getOnlineUsers().length
   }
 
+  getGroupColor(groupId: string) {
+    const group = this.groups.get(groupId)
+    return group?.color || chatColor[0]
+  }
+
   sendPrivateMessage(sender: string, receiver: string, message: string) {
     const userPair = this._getUserPair(sender, receiver)
     const chatHistory = this.privateChat.get(userPair) || []

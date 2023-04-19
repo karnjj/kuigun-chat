@@ -22,15 +22,21 @@ class ChatService {
   private io: Server
 
   private users = new Map<string, string>()
-  private privateChat = new Map<UserPair, Message[]>()
+  private privateChat = new Map<string, Message[]>()
   private groups = new Map<string, Group>()
 
   constructor(io: Server) {
     this.io = io
   }
 
-  _getUserPair(user1: string, user2: string): UserPair {
+  getUserPair(user1: string, user2: string): UserPair {
     return [user1, user2].sort() as UserPair
+  }
+
+  getUserSocketIds(username: string) {
+    return Array.from(this.users.entries())
+      .filter(([, name]) => name === username)
+      .map(([id]) => id)
   }
 
   login(socket: Socket, username: string) {
@@ -56,10 +62,11 @@ class ChatService {
   }
 
   sendPrivateMessage(sender: string, receiver: string, message: string) {
-    const userPair = this._getUserPair(sender, receiver)
+    const userPair = JSON.stringify(this.getUserPair(sender, receiver))
     const chatHistory = this.privateChat.get(userPair) || []
     const newMessage = { sender, sendAt: new Date(), message }
     chatHistory.push(newMessage)
+    chatHistory.sort((a, b) => b.sendAt.getTime() - a.sendAt.getTime())
     this.privateChat.set(userPair, chatHistory)
   }
 
@@ -83,8 +90,8 @@ class ChatService {
   }
 
   getPrivateMessages(sender: string, receiver: string) {
-    const userPair = this._getUserPair(sender, receiver)
-    return this.privateChat.get(userPair) || []
+    const userPair = JSON.stringify(this.getUserPair(sender, receiver))
+    return this.privateChat.get(userPair)
   }
 
   getGroupMessages(groupId: string) {

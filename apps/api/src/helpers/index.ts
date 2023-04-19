@@ -7,4 +7,6 @@ const randomString = (length: number) => {
 
 const groupKey = (groupId: string) => `group-${groupId}`
 
-export { groupKey, randomString }
+const userKey = (usernames: string[]) => `user-${usernames.sort().join('-')}`
+
+export { groupKey, userKey, randomString }

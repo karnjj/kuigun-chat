@@ -2,8 +2,10 @@ import { Box, Stack } from '@mui/material'
 import PageChatRow from '../PageChatRow'
 import { useOnlinePeople } from '@/queries/usePeople'
 import { useSession } from '@/contexts/sessionContext'
+import { useRouter } from 'next/router'
 
 const PeopleTab = () => {
+  const router = useRouter()
   const { username } = useSession()
   const onlinePeople = useOnlinePeople()
   return (
@@ -17,7 +19,18 @@ const PeopleTab = () => {
         }}
       >
         {onlinePeople?.map(
-          (person, idx) => person !== username && <PageChatRow key={idx} name={person} isNew={false} isGroup={false} />
+          (person, idx) =>
+            person !== username && (
+              <PageChatRow
+                key={idx}
+                name={person}
+                isNew={false}
+                isGroup={false}
+                onClick={() => {
+                  router.push(`/chat/with/${person}`)
+                }}
+              />
+            )
         )}
       </Stack>
     </Box>

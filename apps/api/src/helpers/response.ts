@@ -4,7 +4,7 @@ const send = (io: Server, topic: string, msg: any) => {
   io.emit(topic, msg)
 }
 
-const sendRoom = (io: Server, room: string, topic: string, msg: any) => {
+const sendRoom = (io: Server, room: string | string[], topic: string, msg: any) => {
   io.to(room).emit(topic, msg)
 }
 

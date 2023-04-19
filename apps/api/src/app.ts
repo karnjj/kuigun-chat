@@ -3,7 +3,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import { response, send, sendRoom } from './helpers/response'
 import ChatService from './services/chatService'
-import { groupKey } from './helpers'
+import { groupKey, userKey } from './helpers'
 
 const app: Express = express()
 const server = http.createServer(app)
@@ -48,7 +48,9 @@ io.on('connection', (socket) => {
   })
 
   socket.on('send-private-message', (data) => {
-    chatService.sendPrivateMessage(socket.username, data.receiver, data.message)
+    chatService.sendPrivateMessage(socket.username, data.to, data.message)
+    const userPair = chatService.getUserPair(socket.username, data.to)
+    sendRoom(io, userKey(userPair), 'private-chat-history', chatService.getPrivateMessages(socket.username, data.to))
   })
 
   socket.on('send-group-message', (data) => {
@@ -87,8 +89,9 @@ io.on('connection', (socket) => {
     sendRoom(io, groupKey(data.groupId), 'group-chat-history', chatService.getGroupMessages(data.groupId))
   })
 
-  socket.on('get-private-chat-history', (data) => {
-    response(io, socket.id, 'get-private-chat-history', chatService.getPrivateMessages(socket.username, data.receiver))
+  socket.on('trigger-private-chat-history', (data) => {
+    const userPair = chatService.getUserPair(socket.username, data.with)
+    sendRoom(io, userKey(userPair), 'private-chat-history', chatService.getPrivateMessages(socket.username, data.with))
   })
 
   socket.on('join-group', (data) => {
@@ -97,6 +100,16 @@ io.on('connection', (socket) => {
 
   socket.on('leave-group', (data) => {
     socket.leave(groupKey(data.groupId))
+  })
+
+  socket.on('join-private', (data) => {
+    const userPair = chatService.getUserPair(socket.username, data.with)
+    socket.join(userKey(userPair))
+  })
+
+  socket.on('leave-private', (data) => {
+    const userPair = chatService.getUserPair(socket.username, data.with)
+    socket.leave(userKey(userPair))
   })
 })
 

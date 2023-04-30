@@ -1,9 +1,11 @@
 import ChatBox from '@/components/ChatBox'
 import ChatContainer from '@/components/ChatContainer'
 import { useSession } from '@/contexts/sessionContext'
+import useLocalStorage from '@/hooks/useLocalStorage'
 import { useGroupColor, useGroupHistory, useSendGroupMessage } from '@/queries/useGroup'
 import { Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const ChatGroup = () => {
   const router = useRouter()
@@ -12,6 +14,15 @@ const ChatGroup = () => {
   const { username } = useSession()
   const chatHistory = useGroupHistory(groupId)
   const color = useGroupColor(groupId)
+
+  const [readTime, setReadTime] = useLocalStorage('read-time', {})
+
+  useEffect(() => {
+    if (chatHistory?.length) {
+      const lastMsg = chatHistory[0]
+      setReadTime({ ...readTime, [groupId]: lastMsg.sendAt })
+    }
+  }, [chatHistory?.length, setReadTime])
 
   const handleSendMsg = (msg: string) => {
     sendMessage({ groupId, message: msg })

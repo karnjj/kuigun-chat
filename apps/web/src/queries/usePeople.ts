@@ -2,12 +2,26 @@ import { useSocket } from '@/contexts/socketContext'
 import { trigger } from '@/utils'
 import { useEffect, useState } from 'react'
 
-type TOnlinePeople = string[]
+type TOnlinePeople = { username: string; lastActive?: Date }[]
 
 interface Message {
   sender: string
   sendAt: Date
   message: string
+}
+
+const useNewMessageArrived = (from: string) => {
+  const { socket } = useSocket()
+  const [data, setData] = useState<Message>()
+
+  useEffect(() => {
+    if (!socket) return
+    socket.on(`private-${from}-new-message`, (data: Message) => {
+      setData(data)
+    })
+  }, [])
+
+  return data
 }
 
 const useOnlinePeople = () => {
@@ -57,4 +71,4 @@ const usePrivateHistory = (nickname: string) => {
   return data
 }
 
-export { useOnlinePeople, useSendPrivateMessage, usePrivateHistory }
+export { useOnlinePeople, useSendPrivateMessage, usePrivateHistory, useNewMessageArrived }

@@ -48,8 +48,11 @@ class ChatService {
     this.users.delete(socket.id)
   }
 
-  getOnlineUsers() {
-    return Array.from(new Set(this.users.values()))
+  getOnlineUsers(me?: string) {
+    return Array.from(new Set(this.users.values())).map((username) => ({
+      username,
+      lastActive: me ? this.getPrivateMessages(me, username)?.[0]?.sendAt : undefined,
+    }))
   }
 
   getOnlineUserCount() {
@@ -68,6 +71,8 @@ class ChatService {
     chatHistory.push(newMessage)
     chatHistory.sort((a, b) => b.sendAt.getTime() - a.sendAt.getTime())
     this.privateChat.set(userPair, chatHistory)
+
+    return newMessage
   }
 
   sendGroupMessage(sender: string, groupId: string, message: string) {
@@ -78,6 +83,8 @@ class ChatService {
     const newMessage = { sender, sendAt: new Date(), message }
     group.chatHistory.push(newMessage)
     group.chatHistory.sort((a, b) => b.sendAt.getTime() - a.sendAt.getTime())
+
+    return newMessage
   }
 
   addGroupParticipant(groupId: string, username: string) {
@@ -129,10 +136,11 @@ class ChatService {
 
   getAllGroupsWithOnlineCount() {
     const onlineUsers = this.getOnlineUsers()
-    return Array.from(this.groups.values()).map(({ id, name, participants }) => ({
+    return Array.from(this.groups.values()).map(({ id, name, chatHistory, participants }) => ({
       id,
       name,
-      onlineCount: Array.from(participants).filter((username) => onlineUsers.includes(username)).length,
+      lastActive: chatHistory[0]?.sendAt,
+      onlineCount: Array.from(participants).filter((u) => onlineUsers.find(({ username }) => username === u)).length,
     }))
   }
 
@@ -140,7 +148,9 @@ class ChatService {
     const onlineUsers = this.getOnlineUsers()
     const group = this.groups.get(groupId)
 
-    return group ? Array.from(group.participants).filter((username) => onlineUsers.includes(username)).length : 0
+    return group
+      ? Array.from(group.participants).filter((u) => onlineUsers.find(({ username }) => username === u)).length
+      : 0
   }
 
   getAllGroupColors() {

@@ -38,29 +38,31 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
   chatService.login(socket, socket.username)
-  send(io, 'online-users', chatService.getOnlineUsers())
+  send(io, 'online-users', chatService.getOnlineUsers(socket.username))
   send(io, 'all-groups', chatService.getAllGroupsWithOnlineCount())
 
   socket.on('disconnect', () => {
     chatService.logout(socket)
-    send(io, 'online-users', chatService.getOnlineUsers())
+    send(io, 'online-users', chatService.getOnlineUsers(socket.username))
     send(io, 'all-groups', chatService.getAllGroupsWithOnlineCount())
   })
 
   socket.on('send-private-message', (data) => {
-    chatService.sendPrivateMessage(socket.username, data.to, data.message)
+    const message = chatService.sendPrivateMessage(socket.username, data.to, data.message)
     const userPair = chatService.getUserPair(socket.username, data.to)
     sendRoom(io, userKey(userPair), 'private-chat-history', chatService.getPrivateMessages(socket.username, data.to))
+    sendRoom(io, chatService.getUserSocketIds(data.to), `private-${socket.username}-new-message`, message)
   })
 
   socket.on('send-group-message', (data) => {
-    chatService.sendGroupMessage(socket.username, data.groupId, data.message)
+    const message = chatService.sendGroupMessage(socket.username, data.groupId, data.message)
     sendRoom(io, groupKey(data.groupId), 'group-chat-history', chatService.getGroupMessages(data.groupId))
 
     const added = chatService.addGroupParticipant(data.groupId, socket.username)
     if (added) {
       send(io, `group-${data.groupId}-online-count`, chatService.getGroupOnlineCount(data.groupId))
     }
+    send(io, `group-${data.groupId}-new-message`, message)
   })
 
   socket.on('create-group', (data) => {
@@ -78,7 +80,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('trigger-online-users', () => {
-    send(io, 'online-users', chatService.getOnlineUsers())
+    send(io, 'online-users', chatService.getOnlineUsers(socket.username))
   })
 
   socket.on('trigger-all-groups', () => {

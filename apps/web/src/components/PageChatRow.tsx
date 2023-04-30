@@ -6,6 +6,7 @@ import { Box, Stack, Typography } from '@mui/material'
 interface PageChatRowProps {
   name: string
   isNew: boolean
+  lastActive?: Date
   isGroup: boolean
   groupId?: string
   members?: number

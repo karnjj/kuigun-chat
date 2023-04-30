@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 type TAllGroups = {
   id: string
   name: string
+  lastActive?: Date
   onlineCount: number
 }[]
 
@@ -58,6 +59,20 @@ interface Message {
   sender: string
   sendAt: Date
   message: string
+}
+
+const useNewGroupMessageArrived = (groupId: string) => {
+  const { socket } = useSocket()
+  const [data, setData] = useState<Message>()
+
+  useEffect(() => {
+    if (!socket) return
+    socket.on(`group-${groupId}-new-message`, (data: Message) => {
+      setData(data)
+    })
+  }, [])
+
+  return data
 }
 
 const useGroupHistory = (groupId: string) => {
@@ -135,4 +150,5 @@ export {
   useSendGroupMessage,
   useListenGroupOnlineCount,
   useGroupColor,
+  useNewGroupMessageArrived,
 }

@@ -3,7 +3,7 @@ import GroupBar from '../GroupBar'
 import PageChatRow from '../PageChatRow'
 import { useAllGroups, useNewGroupMessageArrived } from '@/queries/useGroup'
 import { useRouter } from 'next/router'
-import { ComponentProps, use, useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 import useLocalStorage from '@/hooks/useLocalStorage'
 
 const GroupTab = () => {

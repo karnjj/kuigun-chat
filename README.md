@@ -1,4 +1,8 @@
 # Kuigun Chat
+
+[server -> apps/api](https://github.com/karnjj/kuigun-chat/tree/main/apps/api)
+[client -> apps/web](https://github.com/karnjj/kuigun-chat/tree/main/apps/web)
+
 ## Install pnpm
 
 [How to install pnpm](https://pnpm.io/installation)
@@ -46,8 +50,8 @@ Folder structure:
 ```bash
 .
 ├── apps
-│   ├── api # backend
-│   └── web # frontend
+│   ├── api # server
+│   └── web # client
 ├── ...
 └── README.md
 ```

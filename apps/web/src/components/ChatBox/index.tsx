@@ -95,8 +95,10 @@ interface ChatMessageProps {
 const ChatMessage = ({ message, senderName, isSender, color }: ChatMessageProps) => {
   return (
     <Stack spacing={0.5} alignItems={isSender ? 'end' : 'start'}>
-      <Box p={1} bgcolor={color} width="fit-content" borderRadius={'12px'}>
-        <Typography variant="h5">{message}</Typography>
+      <Box p={1} bgcolor={color} width="fit-content" borderRadius={'12px'} maxWidth="100%">
+        <Typography variant="h5" sx={{ wordBreak: 'break-word' }}>
+          {message}
+        </Typography>
       </Box>
       <Typography variant="caption">{`Send by ${senderName}`}</Typography>
     </Stack>

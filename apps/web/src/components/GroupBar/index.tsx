@@ -3,15 +3,19 @@ import { useShow } from '@/hooks/useShow'
 import CreateGroupDialog from '../CreateGroupDialog'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { useIsGroupExist } from '@/queries/useGroup'
 
 const GroupBar = () => {
   const router = useRouter()
   const createGroup = useShow()
+  const [isGroupExist] = useIsGroupExist()
   const [groupId, setGroupId] = useState<string>()
 
-  const handleJoinGroup = () => {
-    if (groupId) {
+  const handleJoinGroup = async () => {
+    if (groupId && (await isGroupExist(groupId))) {
       router.push(`/chat/group/${groupId}`)
+    } else {
+      alert('Group not found')
     }
   }
 

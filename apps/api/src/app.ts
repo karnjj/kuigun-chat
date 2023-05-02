@@ -75,6 +75,10 @@ io.on('connection', (socket) => {
     response(io, socket.id, 'get-all-colors', chatService.getAllGroupColors())
   })
 
+  socket.on('is-group-exist', (data) => {
+    response(io, socket.id, 'is-group-exist', chatService.isGroupExist(data.groupId))
+  })
+
   socket.on('get-group-color', (data) => {
     response(io, socket.id, 'get-group-color', chatService.getGroupColor(data.groupId))
   })

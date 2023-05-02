@@ -55,6 +55,16 @@ const useCreateGroup = () => {
   return [trigger]
 }
 
+const useIsGroupExist = () => {
+  const { socket } = useSocket()
+
+  const trigger = async (groupId: string) => {
+    return await simRest<boolean>(socket, 'is-group-exist', { groupId })
+  }
+
+  return [trigger]
+}
+
 interface Message {
   sender: string
   sendAt: Date
@@ -151,4 +161,5 @@ export {
   useListenGroupOnlineCount,
   useGroupColor,
   useNewGroupMessageArrived,
+  useIsGroupExist,
 }

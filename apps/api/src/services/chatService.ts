@@ -48,10 +48,14 @@ class ChatService {
     this.users.delete(socket.id)
   }
 
-  getOnlineUsers(me?: string) {
-    return Array.from(new Set(this.users.values())).map((username) => ({
+  getOnlineUsers() {
+    return Array.from(new Set(this.users.values()))
+  }
+
+  getLastActive(me: string, withs: string[]) {
+    return withs.map((username) => ({
       username,
-      lastActive: me ? this.getPrivateMessages(me, username)?.[0]?.sendAt : undefined,
+      lastActive: this.getPrivateMessages(me, username)?.[0]?.sendAt || undefined,
     }))
   }
 
@@ -140,7 +144,7 @@ class ChatService {
       id,
       name,
       lastActive: chatHistory[0]?.sendAt,
-      onlineCount: Array.from(participants).filter((u) => onlineUsers.find(({ username }) => username === u)).length,
+      onlineCount: Array.from(participants).filter((u) => onlineUsers.includes(u)).length,
     }))
   }
 
@@ -148,9 +152,7 @@ class ChatService {
     const onlineUsers = this.getOnlineUsers()
     const group = this.groups.get(groupId)
 
-    return group
-      ? Array.from(group.participants).filter((u) => onlineUsers.find(({ username }) => username === u)).length
-      : 0
+    return group ? Array.from(group.participants).filter((u) => onlineUsers.includes(u)).length : 0
   }
 
   getAllGroupColors() {

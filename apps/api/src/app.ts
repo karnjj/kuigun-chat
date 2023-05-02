@@ -38,13 +38,17 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
   chatService.login(socket, socket.username)
-  send(io, 'online-users', chatService.getOnlineUsers(socket.username))
+  send(io, 'online-users', chatService.getOnlineUsers())
   send(io, 'all-groups', chatService.getAllGroupsWithOnlineCount())
 
   socket.on('disconnect', () => {
     chatService.logout(socket)
-    send(io, 'online-users', chatService.getOnlineUsers(socket.username))
+    send(io, 'online-users', chatService.getOnlineUsers())
     send(io, 'all-groups', chatService.getAllGroupsWithOnlineCount())
+  })
+
+  socket.on('get-last-active', (data) => {
+    response(io, socket.id, 'get-last-active', chatService.getLastActive(socket.username, data.withs))
   })
 
   socket.on('send-private-message', (data) => {
@@ -84,7 +88,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('trigger-online-users', () => {
-    send(io, 'online-users', chatService.getOnlineUsers(socket.username))
+    send(io, 'online-users', chatService.getOnlineUsers())
   })
 
   socket.on('trigger-all-groups', () => {

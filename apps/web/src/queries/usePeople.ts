@@ -1,8 +1,10 @@
 import { useSocket } from '@/contexts/socketContext'
-import { trigger } from '@/utils'
+import { simRest, trigger } from '@/utils'
 import { useEffect, useState } from 'react'
 
-type TOnlinePeople = { username: string; lastActive?: Date }[]
+type TOnlinePeople = string[]
+
+type TLastActive = { username: string; lastActive: Date }[]
 
 interface Message {
   sender: string
@@ -40,6 +42,21 @@ const useOnlinePeople = () => {
   return onlinePeople
 }
 
+const useLastActive = (withs?: string[]) => {
+  const { socket } = useSocket()
+  const [lastActive, setLastActive] = useState<TLastActive>()
+
+  useEffect(() => {
+    if (!socket || !withs) return
+
+    simRest<TLastActive>(socket, 'get-last-active', { withs }).then((data) => {
+      setLastActive(data)
+    })
+  }, [socket, withs])
+
+  return lastActive
+}
+
 const useSendPrivateMessage = () => {
   const { socket } = useSocket()
 
@@ -71,4 +88,4 @@ const usePrivateHistory = (nickname: string) => {
   return data
 }
 
-export { useOnlinePeople, useSendPrivateMessage, usePrivateHistory, useNewMessageArrived }
+export { useOnlinePeople, useSendPrivateMessage, usePrivateHistory, useNewMessageArrived, useLastActive }

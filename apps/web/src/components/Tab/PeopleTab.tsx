@@ -1,6 +1,6 @@
 import { Box, Stack } from '@mui/material'
 import PageChatRow from '../PageChatRow'
-import { useNewMessageArrived, useOnlinePeople } from '@/queries/usePeople'
+import { useLastActive, useNewMessageArrived, useOnlinePeople } from '@/queries/usePeople'
 import { useSession } from '@/contexts/sessionContext'
 import { useRouter } from 'next/router'
 import { ComponentProps, useEffect, useState } from 'react'
@@ -10,6 +10,8 @@ const PeopleTab = () => {
   const router = useRouter()
   const { username } = useSession()
   const onlinePeople = useOnlinePeople()
+  const lastActives = useLastActive(onlinePeople)
+
   return (
     <Box px={1.5} py={1.5} sx={{ bgcolor: 'background.paper' }}>
       <Stack
@@ -22,15 +24,15 @@ const PeopleTab = () => {
       >
         {onlinePeople?.map(
           (person, idx) =>
-            person.username !== username && (
+            person !== username && (
               <PeopleChatRow
                 key={idx}
-                name={person.username}
-                lastActive={person.lastActive}
+                name={person}
+                lastActive={lastActives?.find((lastActive) => lastActive.username === person)?.lastActive}
                 isNew={false}
                 isGroup={false}
                 onClick={() => {
-                  router.push(`/chat/with/${person.username}`)
+                  router.push(`/chat/with/${person}`)
                 }}
               />
             )

@@ -37,7 +37,7 @@ const PageChatRow = ({ name, isNew, isGroup, groupId, members, onClick }: PageCh
           {isNew ? <CircleIcon sx={{ color: 'yellow' }} fontSize="small" /> : null}
 
           {isGroup && groupId ? <OnlineBadge num_members={num_members} groupId={groupId} /> : null}
-          <NavigateNextIcon />
+          <NavigateNextIcon sx={{ color: 'text.secondary' }} />
         </Stack>
       </Box>
     </>
